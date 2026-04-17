@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a2e; }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    background: #f8f9fa;
+    margin: 40px auto;
+    padding: 52px 60px 44px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* bande couleur gauche */
+  .slide::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 8px;
+    background: linear-gradient(180deg, #1e6fd9, #8B0000);
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 28px;
+    font-weight: 400;
+  }
+
+  /* ── SLIDE 1 ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    flex: 1;
+  }
+
+  .panel {
+    background: white;
+    border-radius: 10px;
+    padding: 22px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+  }
+  .panel h2 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: #1e6fd9;
+    margin-bottom: 16px;
+  }
+
+  .pool-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-bottom: 18px;
+  }
+  .pool-cell {
+    border-radius: 6px;
+    padding: 7px 9px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .eg { background: #8B0000; }
+  .g  { background: #e8453c; }
+  .c  { background: #f5a623; color: #333; }
+  .d  { background: #1e6fd9; }
+  .ed { background: #1a1a2e; }
+  .theme-label { background: #eee; color: #333; font-weight: 500; }
+
+  .arrow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .arrow { font-size: 20px; color: #aaa; }
+
+  .code-box {
+    background: #1a1a2e;
+    color: #a8d8a8;
+    border-radius: 7px;
+    padding: 12px 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .code-box .comment { color: #777; }
+  .code-box .kw      { color: #79b8ff; }
+  .code-box .fn      { color: #ffcc66; }
+  .code-box .str     { color: #f8c291; }
+
+  .legend-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #444;
+  }
+  .dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .result-box {
+    border-left: 4px solid #1e6fd9;
+    padding: 10px 14px;
+    background: #f0f6ff;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: #333;
+    margin-top: 12px;
+  }
+  .result-box b { color: #1a1a2e; }
+
+  /* ── SLIDE 2 ── */
+  .pipeline-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    flex: 1;
+  }
+
+  .pipe-block {
+    background: white;
+    border-radius: 10px;
+    padding: 18px 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .pipe-arrow {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    color: #ccc;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+  .pipe-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .pipe-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+  }
+  .pipe-detail {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.5;
+  }
+  .pipe-badge {
+    margin-top: 8px;
+    background: #f0f6ff;
+    color: #1e6fd9;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .info-card {
+    background: white;
+    border-radius: 8px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.07);
+  }
+  .info-card h3 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    color: #1e6fd9;
+    margin-bottom: 8px;
+  }
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .metric-label { font-size: 12px; color: #555; }
+  .metric-bar-wrap { flex: 1; margin: 0 10px; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+  .metric-bar { height: 100%; border-radius: 4px; }
+  .metric-val { font-size: 12px; font-weight: 700; color: #1a1a2e; width: 32px; text-align: right; }
+
+  .warn-box {
+    border-left: 4px solid #f5a623;
+    background: #fffbf0;
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #555;
+  }
+  .warn-box b { color: #c87000; }
+
+  .slide-num {
+    position: absolute;
+    bottom: 18px;
+    right: 28px;
+    font-size: 12px;
+    color: #bbb;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════ SLIDE 1 ══════════════════════════════ -->
+<div class="slide">
+  <h1>Génération du corpus d'entraînement synthétique</h1>
+  <div class="subtitle">Approche : pools de phrases discriminantes par classe politique × thème</div>
+
+  <div class="grid-2">
+
+    <!-- colonne gauche : structure des pools -->
+    <div class="panel">
+      <h2>Structure des pools (5 classes × 6 thèmes × ~10 phrases)</h2>
+      <div class="pool-grid">
+        <div class="pool-cell theme-label"></div>
+        <div class="pool-cell theme-label">Sécurité</div>
+        <div class="pool-cell theme-label">Écologie</div>
+        <div class="pool-cell theme-label">Économie</div>
+        <div class="pool-cell theme-label">Mobilité</div>
+        <div class="pool-cell theme-label">Éducation</div>
+        <div class="pool-cell theme-label">Social</div>
+
+        <div class="pool-cell eg">EG</div>
+        <div class="pool-cell eg" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell eg" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell eg" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell eg" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell eg" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell eg" style="opacity:.8">10 phrases</div>
+
+        <div class="pool-cell g">G</div>
+        <div class="pool-cell g" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell g" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell g" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell g" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell g" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell g" style="opacity:.8">10 phrases</div>
+
+        <div class="pool-cell c">C</div>
+        <div class="pool-cell c" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell c" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell c" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell c" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell c" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell c" style="opacity:.8">10 phrases</div>
+
+        <div class="pool-cell d">D</div>
+        <div class="pool-cell d" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell d" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell d" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell d" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell d" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell d" style="opacity:.8">10 phrases</div>
+
+        <div class="pool-cell ed">ED</div>
+        <div class="pool-cell ed" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell ed" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell ed" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell ed" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell ed" style="opacity:.8">10 phrases</div>
+        <div class="pool-cell ed" style="opacity:.8">10 phrases</div>
+      </div>
+
+      <div class="legend-row">
+        <div class="legend-item"><div class="dot eg"></div>Extrême gauche</div>
+        <div class="legend-item"><div class="dot g"></div>Gauche</div>
+        <div class="legend-item"><div class="dot c"></div>Centre</div>
+        <div class="legend-item"><div class="dot d"></div>Droite</div>
+        <div class="legend-item"><div class="dot ed"></div>Extrême droite</div>
+      </div>
+    </div>
+
+    <!-- colonne droite : logique de génération -->
+    <div class="panel">
+      <h2>Logique de génération — 40 docs par classe</h2>
+
+      <div class="code-box">
+<span class="kw">for</span> theme <span class="kw">in</span> THEMES:<br>
+&nbsp;&nbsp;pool = PHRASES[label][theme]<br>
+&nbsp;&nbsp;<span class="comment"># tirage aléatoire SANS remise</span><br>
+&nbsp;&nbsp;n = random.<span class="fn">randint</span>(<span class="str">3</span>, <span class="str">6</span>)<br>
+&nbsp;&nbsp;selected = random.<span class="fn">sample</span>(pool, n)<br>
+&nbsp;&nbsp;doc[theme] = <span class="str">' '</span>.<span class="fn">join</span>(selected)
+      </div>
+
+      <div style="font-size:12px; color:#444; margin-bottom:14px; line-height:1.6">
+        Chaque document = combinaison aléatoire de 3 à 6 phrases par thème.<br>
+        <code style="background:#eee; padding:1px 5px; border-radius:3px; font-size:11px">random.sample</code> garantit qu'une même phrase n'apparaît pas deux fois dans un doc.
+      </div>
+
+      <div class="result-box">
+        <b>200 documents générés</b> · 40 par classe · 6 thèmes renseignés<br>
+        <span style="font-size:12px; color:#666">Corpus réel (51 docs) = test uniquement — jamais utilisé à l'entraînement</span>
+      </div>
+
+      <div style="margin-top:14px; padding:10px 14px; background:#fff5f5; border-radius:8px; border-left:4px solid #e8453c; font-size:12px; color:#555">
+        <b style="color:#c0392b">Limite connue :</b> vocabulaire synthétique ≠ vrais tracts → décalage lexical entre train et test
+      </div>
+    </div>
+
+  </div>
+  <div class="slide-num">1 / 2</div>
+</div>
+
+
+<!-- ══════════════════════════════ SLIDE 2 ══════════════════════════════ -->
+<div class="slide">
+  <h1>Pipeline TF-IDF — Entraînement &amp; Évaluation</h1>
+  <div class="subtitle">Vectorisation TF-IDF + Régression logistique multiclasse · fit uniquement sur le train synthétique</div>
+
+  <!-- pipeline horizontal -->
+  <div class="pipeline-row">
+
+    <div class="pipe-block" style="border-top:3px solid #1e6fd9">
+      <div class="pipe-icon">📄</div>
+      <div class="pipe-title">Texte brut</div>
+      <div class="pipe-detail">Concaténation des 6 thèmes par document</div>
+      <div class="pipe-badge">200 train · 51 test</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+
+    <div class="pipe-block" style="border-top:3px solid #8B0000">
+      <div class="pipe-icon">🔢</div>
+      <div class="pipe-title">TF-IDF</div>
+      <div class="pipe-detail">
+        <b>fit_transform</b> sur train<br>
+        <b>transform</b> seul sur test<br>
+        unigrammes + bigrammes
+      </div>
+      <div class="pipe-badge">2 000 features</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+
+    <div class="pipe-block" style="border-top:3px solid #f5a623">
+      <div class="pipe-icon">⚙️</div>
+      <div class="pipe-title">Régression logistique</div>
+      <div class="pipe-detail">
+        Multiclasse (5 classes)<br>
+        class_weight='balanced'<br>
+        Régularisation L2
+      </div>
+      <div class="pipe-badge">fit sur train</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+
+    <div class="pipe-block" style="border-top:3px solid #2a9d8f">
+      <div class="pipe-icon">📊</div>
+      <div class="pipe-title">Prédiction</div>
+      <div class="pipe-detail">
+        Probabilité par classe<br>
+        argmax → label prédit
+      </div>
+      <div class="pipe-badge">sur les 51 docs réels</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+
+    <div class="pipe-block" style="border-top:3px solid #e8453c">
+      <div class="pipe-icon">✅</div>
+      <div class="pipe-title">Évaluation</div>
+      <div class="pipe-detail">
+        Matrice de confusion<br>
+        Précision · Rappel · F1
+      </div>
+      <div class="pipe-badge" style="background:#fff0f0; color:#c0392b">Accuracy : 39 %</div>
+    </div>
+
+  </div>
+
+  <!-- ligne du bas : 3 cartes info -->
+  <div class="bottom-row">
+
+    <div class="info-card">
+      <h3>Pourquoi TF-IDF ?</h3>
+      <div style="font-size:12px; color:#444; line-height:1.6">
+        Valorise les mots <b>rares dans le corpus global mais fréquents dans une classe</b>.<br>
+        Ex : <i>«&nbsp;armement&nbsp;»</i> → score élevé pour ED, faible ailleurs.
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3>F1 par classe (test réel)</h3>
+      <div class="metric-row">
+        <span class="metric-label" style="color:#8B0000">EG</span>
+        <div class="metric-bar-wrap"><div class="metric-bar" style="width:37%;background:#8B0000"></div></div>
+        <span class="metric-val">0.37</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label" style="color:#e8453c">G</span>
+        <div class="metric-bar-wrap"><div class="metric-bar" style="width:29%;background:#e8453c"></div></div>
+        <span class="metric-val">0.29</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label" style="color:#c87000">C</span>
+        <div class="metric-bar-wrap"><div class="metric-bar" style="width:24%;background:#f5a623"></div></div>
+        <span class="metric-val">0.24</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label" style="color:#1e6fd9">D</span>
+        <div class="metric-bar-wrap"><div class="metric-bar" style="width:29%;background:#1e6fd9"></div></div>
+        <span class="metric-val">0.29</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label" style="color:#1a1a2e">ED</span>
+        <div class="metric-bar-wrap"><div class="metric-bar" style="width:60%;background:#1a1a2e"></div></div>
+        <span class="metric-val">0.60</span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3>Interprétation &amp; suite</h3>
+      <div class="warn-box">
+        <b>39 % = baseline honnête.</b> Le train synthétique et les vrais tracts n'ont pas le même vocabulaire → domain shift.<br><br>
+        Prochaine étape : enrichir le corpus réel pour réduire ce décalage.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="slide-num">2 / 2</div>
+</div>
+
+</body>
+</html>
